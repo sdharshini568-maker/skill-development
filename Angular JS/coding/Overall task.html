@@ -1,6 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
-    
+<html lang="en" ng-app="cabApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cab Booking System</title>
 
+  <!-- AngularJS CDN -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#f2f2f2;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .container{
+      background:white;
+      width:400px;
+      padding:25px;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.2);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    label{
+      font-weight:bold;
+      display:block;
+      margin-top:10px;
+    }
+
+    input, select{
+      width:100%;
+      padding:10px;
+      margin-top:5px;
+      border:1px solid #ccc;
+      border-radius:5px;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      margin-top:20px;
+      background:#007bff;
+      color:white;
+      border:none;
+      border-radius:5px;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#0056b3;
+    }
+
+    .result{
+      margin-top:20px;
+      background:#e9f7ef;
+      padding:15px;
+      border-radius:5px;
+    }
+
+    .price{
+      color:green;
+      font-size:20px;
+      font-weight:bold;
+    }
+  </style>
+</head>
+
+<body ng-controller="CabController">
+
+  <div class="container">
+    <h2>Cab Booking System</h2>
+
+    <label>Name</label>
+    <input type="text" ng-model="customer.name" placeholder="Enter your name">
+
+    <label>Pickup Location</label>
+    <input type="text" ng-model="customer.pickup" placeholder="Enter pickup">
+
+    <label>Drop Location</label>
+    <input type="text" ng-model="customer.drop" placeholder="Enter destination">
+
+    <label>Distance (KM)</label>
+    <input type="number" ng-model="customer.distance" placeholder="Enter distance">
+
+    <label>Select Cab Type</label>
+    <select ng-model="customer.cabType">
+      <option value="Mini">Mini</option>
+      <option value="Sedan">Sedan</option>
+      <option value="SUV">SUV</option>
+    </select>
+
+    <button ng-click="bookCab()">Book Cab</button>
+
+    <div class="result" ng-if="bookingDone">
+      <h3>Booking Confirmed ✅</h3>
+      <p><strong>Name:</strong> {{customer.name}}</p>
+      <p><strong>Pickup:</strong> {{customer.pickup}}</p>
+      <p><strong>Drop:</strong> {{customer.drop}}</p>
+      <p><strong>Cab Type:</strong> {{customer.cabType}}</p>
+      <p><strong>Distance:</strong> {{customer.distance}} KM</p>
+      <p class="price">Total Fare: ₹{{fare}}</p>
+    </div>
+  </div>
+
+  <script>
+    var app = angular.module("cabApp", []);
+
+    app.controller("CabController", function($scope){
+
+      $scope.bookingDone = false;
+
+      $scope.bookCab = function(){
+
+        let rate = 0;
+
+        // Fare per KM
+        if($scope.customer.cabType == "Mini"){
+          rate = 10;
+        }
+        else if($scope.customer.cabType == "Sedan"){
+          rate = 15;
+        }
+        else if($scope.customer.cabType == "SUV"){
+          rate = 20;
+        }
+
+        $scope.fare = $scope.customer.distance * rate;
+
+        $scope.bookingDone = true;
+      };
+
+    });
+  </script>
+
+</body>
 </html>
